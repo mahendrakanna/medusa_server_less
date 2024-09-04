@@ -47,3 +47,29 @@ resource "aws_security_group" "medusa_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# Internet Gateway
+resource "aws_internet_gateway" "medusa_igw" {
+  vpc_id = aws_vpc.medusa_vpc.id
+}
+
+# Route Table
+resource "aws_route_table" "medusa_route_table" {
+  vpc_id = aws_vpc.medusa_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.medusa_igw.id
+  }
+}
+
+# Route Table Associations
+resource "aws_route_table_association" "medusa_subnet_a_association" {
+  subnet_id      = aws_subnet.medusa_subnet_a.id
+  route_table_id = aws_route_table.medusa_route_table.id
+}
+
+resource "aws_route_table_association" "medusa_subnet_b_association" {
+  subnet_id      = aws_subnet.medusa_subnet_b.id
+  route_table_id = aws_route_table.medusa_route_table.id
+}
