@@ -30,4 +30,5 @@ resource "aws_ecs_service" "medusa_service" {
     subnets         = [aws_subnet.medusa_subnet_a.id, aws_subnet.medusa_subnet_b.id]
     security_groups = [aws_security_group.medusa_sg.id]
   }
+  depends_on = [aws_lb_listener.medusa_listener]
 }
